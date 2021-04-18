@@ -1,5 +1,4 @@
 const AttendanceData = require("../models/attendance.model");
-const SkriningData = require("../models/skrining.model");
 
 exports.createAttendance = async (req, res) => {
   const {
@@ -60,34 +59,17 @@ exports.CheckIn = async (req, res) => {
   try {
     const filter = { UserID, Tanggal, Bulan, Tahun };
     const update = { CheckIn };
-    const updateResikoBesar = {
-      CheckIn: "Ditolak, Hasil Skrining Beresiko Besar",
-      CheckOut: "Ditolak, Hasil Skrining Beresiko Besar",
-    };
     const check = await AttendanceData.findOne(filter);
-    const checkSkrining = await SkriningData.findOne(filter);
     console.log(check);
-    console.log(checkSkrining);
-    if (check.CheckIn == null) {
-      if (checkSkrining == null || checkSkrining == undefined) {
+    if (check.Status) {
+      await AttendanceData.updateOne(filter, update).then(() => {
         res.status(200).json({
-          message: "Silahkan lakukan skrining mandiri terlebih dahulu",
+          message: `Selamat datang ${check.Nama}, check In berhasil pada ${update.CheckIn}`,
         });
-      } else if (checkSkrining.HasilTest == "Resiko Besar") {
-        await AttendanceData.updateOne(filter, updateResikoBesar);
-        res.status(200).json({
-          message: "Anda dilarang masuk karena beresiko besar",
-        });
-      } else {
-        await AttendanceData.updateOne(filter, update).then(() => {
-          res.status(200).json({
-            message: `Selamat datang ${check.Nama}, check In berhasil pada ${update.CheckIn}`,
-          });
-        });
-      }
-    } else if (check.CheckIn == "Ditolak, Hasil Skrining Beresiko Besar") {
+      });
+    } else if (!check.Status) {
       res.status(200).json({
-        message: "Akses anda sudah ditolak karena beresiko besar",
+        message: "Silahkan upload bukti test Covid-19 terlebih dahulu",
       });
     } else {
       res.status(200).json({
