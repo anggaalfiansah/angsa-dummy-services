@@ -39,58 +39,58 @@ exports.register = async (req, res) => {
       return res.status(200).json({
         message: "NIK/Email Sudah Terdaftar",
       });
-    }
-
-    const data = new UserData({
-      NIK,
-      Nama,
-      Email,
-      Telpon,
-      TempatLahir,
-      TanggalLahir,
-      Alamat: {
-        Provinsi,
-        Kota,
-        Kecamatan,
-        Kelurahan,
-        DetailAlamat,
-      },
-      Password,
-      FotoProfil,
-      FaceDescriptors: descriptors,
-    });
-
-    const salt = await bcrypt.genSalt(10);
-    data.Password = await bcrypt.hash(Password, salt);
-    await data.save().then((user) => {
-      // Save wajah ke collection Faces
-      const face = new FaceData({
-        UserID: user.id,
-        Nama: user.Nama,
-        FaceDescriptors: user.FaceDescriptors,
-      });
-      face.save();
-
-      const payload = {
-        id: user.id,
-      };
-      jwt.sign(
-        payload,
-        "randomString",
-        {
-          expiresIn: 86400,
+    } else {
+      const data = new UserData({
+        NIK,
+        Nama,
+        Email,
+        Telpon,
+        TempatLahir,
+        TanggalLahir,
+        Alamat: {
+          Provinsi,
+          Kota,
+          Kecamatan,
+          Kelurahan,
+          DetailAlamat,
         },
-        (err, token) => {
-          if (err) throw err;
-          res.status(200).json({
-            message: "Pendaftaran Berhasil",
-            userID: user.id,
-            token,
+        Password,
+        FotoProfil,
+        FaceDescriptors: descriptors,
+      });
+
+      const salt = await bcrypt.genSalt(10);
+      data.Password = await bcrypt.hash(Password, salt);
+      await data.save().then((user) => {
+        // Save wajah ke collection Faces
+        const face = new FaceData({
+          UserID: user.id,
+          Nama: user.Nama,
+          FaceDescriptors: user.FaceDescriptors,
+        });
+        face.save();
+
+        const payload = {
+          id: user.id,
+        };
+        jwt.sign(
+          payload,
+          "randomString",
+          {
             expiresIn: 86400,
-          });
-        }
-      );
-    });
+          },
+          (err, token) => {
+            if (err) throw err;
+            res.status(200).json({
+              message: "Pendaftaran Berhasil",
+              userID: user.id,
+              token,
+              expiresIn: 86400,
+            });
+          }
+        );
+      });
+    }
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Error");
