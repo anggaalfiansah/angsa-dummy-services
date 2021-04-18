@@ -83,6 +83,7 @@ exports.register = async (req, res) => {
         (err, token) => {
           if (err) throw err;
           res.status(200).json({
+            message: "Pendaftaran Berhasil",
             userID: user.id,
             token,
             expiresIn: 86400,
