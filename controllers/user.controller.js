@@ -36,7 +36,7 @@ exports.register = async (req, res) => {
     const nik = await UserData.findOne({ NIK });
     const email = await UserData.findOne({ Email });
     if (nik || email) {
-      return res.status(400).json({
+      return res.status(200).json({
         message: "NIK/Email Sudah Terdaftar",
       });
     }
