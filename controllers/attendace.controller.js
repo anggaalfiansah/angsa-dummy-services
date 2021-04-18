@@ -2,7 +2,16 @@ const AttendanceData = require("../models/attendance.model");
 const SkriningData = require("../models/skrining.model");
 
 exports.createAttendance = async (req, res) => {
-  const { UserID, Nama, Tanggal, Bulan, Tahun, Keterangan } = req.body;
+  const {
+    UserID,
+    Nama,
+    Tanggal,
+    Bulan,
+    Tahun,
+    ScoreSkrining,
+    HasilSkrining,
+    Keterangan,
+  } = req.body;
   try {
     const Attendance = await AttendanceData.find({ Tanggal, Bulan, Tahun });
     if (Attendance.length < 15) {
@@ -20,6 +29,8 @@ exports.createAttendance = async (req, res) => {
           Tanggal,
           Bulan,
           Tahun,
+          ScoreSkrining,
+          HasilSkrining,
           Keterangan,
         });
         await data.save().then(() => {
@@ -65,8 +76,7 @@ exports.CheckIn = async (req, res) => {
       } else if (checkSkrining.HasilTest == "Resiko Besar") {
         await AttendanceData.updateOne(filter, updateResikoBesar);
         res.status(200).json({
-          message:
-            "Anda dilarang masuk karena beresiko besar",
+          message: "Anda dilarang masuk karena beresiko besar",
         });
       } else {
         await AttendanceData.updateOne(filter, update).then(() => {
@@ -75,11 +85,11 @@ exports.CheckIn = async (req, res) => {
           });
         });
       }
-    } else if(check.CheckIn == "Ditolak, Hasil Skrining Beresiko Besar"){
+    } else if (check.CheckIn == "Ditolak, Hasil Skrining Beresiko Besar") {
       res.status(200).json({
         message: "Akses anda sudah ditolak karena beresiko besar",
       });
-    }else {
+    } else {
       res.status(200).json({
         message: `Anda sudah check in pada ${update.CheckIn}`,
       });
