@@ -62,18 +62,20 @@ exports.CheckIn = async (req, res) => {
     const check = await AttendanceData.findOne(filter);
     console.log(check);
     if (check.Status) {
-      await AttendanceData.updateOne(filter, update).then(() => {
-        res.status(200).json({
-          message: `Selamat datang ${check.Nama}, check In berhasil pada ${update.CheckIn}`,
+      if(!check.CheckIn) {
+        await AttendanceData.updateOne(filter, update).then(() => {
+          res.status(200).json({
+            message: `Selamat datang ${check.Nama}, check in berhasil pada ${update.CheckIn}`,
+          });
         });
-      });
-    } else if (!check.Status) {
-      res.status(200).json({
-        message: "Silahkan upload bukti test Covid-19 terlebih dahulu",
-      });
+      } else {
+        res.status(200).json({
+          message: `Anda sudah check in pada ${update.CheckIn}`,
+        });
+      }
     } else {
       res.status(200).json({
-        message: `Anda sudah check in pada ${update.CheckIn}`,
+        message: "Silahkan upload bukti test Covid-19 terlebih dahulu",
       });
     }
   } catch (err) {
