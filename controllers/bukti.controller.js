@@ -5,6 +5,10 @@ exports.createBukti = async (req, res) => {
   const { AttendanceID, JenisTest, TanggalTest, HasilTest } = req.body;
   try {
     const FotoBukti = `images/${req.file.filename}`;
+    console.log(FotoBukti);
+    console.log(
+      ({ AttendanceID, JenisTest, TanggalTest, HasilTest } = req.body)
+    );
     const CekBukti = await BuktiData.findOne({ AttendanceID });
     const CekAttendance = await AttendanceData.findById(AttendanceID);
     const CekMasaBerlaku =
@@ -26,7 +30,7 @@ exports.createBukti = async (req, res) => {
             HasilTest,
             FotoBukti,
           });
-          console.log(data)
+          console.log(data);
           const submit = await data.save();
           if (submit) {
             await AttendanceData.findByIdAndUpdate(AttendanceID, {
