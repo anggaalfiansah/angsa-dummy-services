@@ -30,7 +30,7 @@ const attendanceModel = new mongodb.Schema({
     default: null,
   },
   ScoreSkrining: {
-    type: number,
+    type: Number,
     required: true,
   },
   HasilSkrining: {
