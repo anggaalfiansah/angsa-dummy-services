@@ -29,6 +29,14 @@ const attendanceModel = new mongodb.Schema({
     type: String,
     default: null,
   },
+  ScoreSkrining: {
+    type: number,
+    required: true,
+  },
+  HasilSkrining: {
+    type: String,
+    required: true,
+  },
   Keterangan: {
     type: String,
     required: true,
