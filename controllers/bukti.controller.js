@@ -3,12 +3,10 @@ const BuktiData = require("../models/bukti.model");
 
 exports.createBukti = async (req, res) => {
   const { AttendanceID, JenisTest, TanggalTest, HasilTest } = req.body;
+  console.log(AttendanceID, JenisTest, TanggalTest, HasilTest);
   try {
     const FotoBukti = `images/${req.file.filename}`;
     console.log(FotoBukti);
-    console.log(
-      ({ AttendanceID, JenisTest, TanggalTest, HasilTest } = req.body)
-    );
     const CekBukti = await BuktiData.findOne({ AttendanceID });
     const CekAttendance = await AttendanceData.findById(AttendanceID);
     const CekMasaBerlaku =
