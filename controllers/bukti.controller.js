@@ -26,6 +26,7 @@ exports.createBukti = async (req, res) => {
             HasilTest,
             FotoBukti,
           });
+          console.log(data)
           const submit = await data.save();
           if (submit) {
             await AttendanceData.findByIdAndUpdate(AttendanceID, {
