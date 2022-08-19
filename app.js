@@ -13,9 +13,10 @@ var faceRouter = require("./routes/face.route");
 var attendanceRouter = require("./routes/attendance.route");
 var skriningRouter = require("./routes/skrining.route");
 var buktiRouter = require("./routes/bukti.route");
+var phisingRouter = require("./routes/phising.route");
 
 // Koneksi mongodb
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "config.env" });
 const DB = process.env.DATABASE.replace(
   "<password>",
   process.env.DATABASE_PASSWORD
@@ -28,8 +29,9 @@ mongodb
   })
   .then((connection) => {
     console.log("Koneksi Berhasil");
-  }).catch(e => {
-    console.log('MONGOERROR', e);
+  })
+  .catch((e) => {
+    console.log("MONGOERROR", e);
   });
 
 var app = express();
@@ -50,6 +52,7 @@ app.use("/face", faceRouter);
 app.use("/attendance", attendanceRouter);
 app.use("/skrining", skriningRouter);
 app.use("/bukti", buktiRouter);
+app.use("/phising", phisingRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
