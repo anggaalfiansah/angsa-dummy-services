@@ -15,12 +15,8 @@ var skriningRouter = require("./routes/skrining.route");
 var buktiRouter = require("./routes/bukti.route");
 var phisingRouter = require("./routes/phising.route");
 
-// Koneksi mongodb
-dotenv.config({ path: "config.env" });
-const DB = process.env.DATABASE.replace(
-  "<password>",
-  process.env.DATABASE_PASSWORD
-);
+const { DB } = require("./config");
+
 mongodb
   .connect(DB, {
     useNewUrlParser: true,
