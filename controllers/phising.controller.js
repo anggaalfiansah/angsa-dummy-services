@@ -65,7 +65,7 @@ exports.sendMassMail = async (req, res) => {
     const send = await sendMail(email_payload);
     if (send?.messageId) {
       res.status(200).json({
-        message: `Phising Berhasil Disebar ${messageId}`,
+        message: `Phising Berhasil Disebar ${send?.messageId}`,
       });
     }
   } catch (error) {
