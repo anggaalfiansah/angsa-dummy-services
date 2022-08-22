@@ -9,6 +9,9 @@ const Phising = new mongodb.Schema({
     type: String,
     required: true,
   },
+  payload: {
+    type: String,
+  },
 });
 
 const PhisingData = mongodb.model("Phising", Phising);

