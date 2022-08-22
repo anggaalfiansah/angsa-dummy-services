@@ -24,7 +24,7 @@ mongodb
     useFindAndModify: true,
   })
   .then((connection) => {
-    console.log("Koneksi Berhasil");
+    console.log("connection success");
   })
   .catch((e) => {
     console.log("MONGOERROR", e);
